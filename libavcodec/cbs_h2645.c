@@ -920,9 +920,11 @@ static int cbs_h264_read_nal_unit(CodedBitstreamContext *ctx,
         break;
 
     default:
+        av_log(ctx->log_ctx, AV_LOG_INFO, "Hit the default case\n");
         return AVERROR(ENOSYS);
     }
 
+    av_log(ctx->log_ctx, AV_LOG_INFO, "passed the end of the switch\n");
     return 0;
 }
 
