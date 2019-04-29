@@ -809,6 +809,7 @@ static int cbs_h264_read_nal_unit(CodedBitstreamContext *ctx,
 
     case H264_NAL_PPS:
         {
+            av_log(ctx->log_ctx, AV_LOG_INFO, "Entered the h264 nal pps case\n");
             H264RawPPS *pps;
 
             err = ff_cbs_alloc_unit_content(ctx, unit, sizeof(*pps),
@@ -924,7 +925,7 @@ static int cbs_h264_read_nal_unit(CodedBitstreamContext *ctx,
         return AVERROR(ENOSYS);
     }
 
-    av_log(ctx->log_ctx, AV_LOG_INFO, "passed the end of the switch\n");
+    av_log(ctx->log_ctx, AV_LOG_INFO, "passed the end of the switch, unit type is: %d\n", unit->type);
     return 0;
 }
 

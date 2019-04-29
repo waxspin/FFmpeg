@@ -165,6 +165,8 @@ static int cbs_read_fragment_content(CodedBitstreamContext *ctx,
 {
     int err, i, j;
 
+    av_log(ctx->log_ctx, AV_LOG_INFO, "frag total units: %d\n", frag->nb_units);
+
     for (i = 0; i < frag->nb_units; i++) {
         CodedBitstreamUnit *unit = &frag->units[i];
 
@@ -237,9 +239,12 @@ int ff_cbs_read_extradata(CodedBitstreamContext *ctx,
     if (err < 0)
         return err;
 
+    av_log(ctx->log_ctx, AV_LOG_INFO, "ff_cbs_read_extradata\n");
+
     return cbs_read_fragment_content(ctx, frag);
 }
 
+// This is likely where we need to determine what should be done instead of calling cbs_read_fragment_content with an fragment containing an invalid NAL unit
 int ff_cbs_read_packet(CodedBitstreamContext *ctx,
                        CodedBitstreamFragment *frag,
                        const AVPacket *pkt)
@@ -264,6 +269,8 @@ int ff_cbs_read_packet(CodedBitstreamContext *ctx,
     if (err < 0)
         return err;
 
+    av_log(ctx->log_ctx, AV_LOG_INFO, "ff_cbs_read_packet\n");
+
     return cbs_read_fragment_content(ctx, frag);
 }
 
@@ -280,6 +287,8 @@ int ff_cbs_read(CodedBitstreamContext *ctx,
     err = ctx->codec->split_fragment(ctx, frag, 0);
     if (err < 0)
         return err;
+
+    av_log(ctx->log_ctx, AV_LOG_INFO, "ff_cbs_read\n");
 
     return cbs_read_fragment_content(ctx, frag);
 }
