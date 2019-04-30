@@ -37,6 +37,7 @@ int ff_h264_pred_weight_table(GetBitContext *gb, const SPS *sps,
 
     pwt->luma_log2_weight_denom = get_ue_golomb(gb);
     if (pwt->luma_log2_weight_denom > 7U) {
+        av_log(logctx, AV_LOG_ERROR, "this is the first spot we see this error:\n");
         av_log(logctx, AV_LOG_ERROR, "luma_log2_weight_denom %d is out of range\n", pwt->luma_log2_weight_denom);
         pwt->luma_log2_weight_denom = 0;
     }
@@ -234,8 +235,10 @@ int ff_h264_parse_ref_count(int *plist_count, int ref_count[2],
         num_ref_idx_active_override_flag = get_bits1(gb);
 
         if (num_ref_idx_active_override_flag) {
+            av_log(NULL, AV_LOG_INFO, "Override flag exists\n");
             ref_count[0] = get_ue_golomb(gb) + 1;
             if (slice_type_nos == AV_PICTURE_TYPE_B) {
+                av_log(NULL, AV_LOG_INFO, "Pic type b\n");
                 ref_count[1] = get_ue_golomb(gb) + 1;
             } else
                 // full range is spec-ok in this case, even for frames

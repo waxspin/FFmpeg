@@ -1762,6 +1762,7 @@ static int h264_slice_header_parse(const H264Context *h, H264SliceContext *sl,
     }
 
     sl->pps_id = get_ue_golomb(&sl->gb);
+    av_log(NULL, AV_LOG_INFO, "pps_id: %d\n", sl->pps_id);
     if (sl->pps_id >= MAX_PPS_COUNT) {
         av_log(h->avctx, AV_LOG_ERROR, "pps_id %u out of range\n", sl->pps_id);
         return AVERROR_INVALIDDATA;
@@ -1836,8 +1837,10 @@ static int h264_slice_header_parse(const H264Context *h, H264SliceContext *sl,
     }
 
     sl->redundant_pic_count = 0;
-    if (pps->redundant_pic_cnt_present)
+    if (pps->redundant_pic_cnt_present) {
+        av_log(NULL, AV_LOG_INFO, "redundant_pic_cnt_present\n");
         sl->redundant_pic_count = get_ue_golomb(&sl->gb);
+    }
 
     if (sl->slice_type_nos == AV_PICTURE_TYPE_B)
         sl->direct_spatial_mv_pred = get_bits1(&sl->gb);
