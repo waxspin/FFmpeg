@@ -61,7 +61,7 @@ static inline int get_ue_golomb(GetBitContext *gb)
         buf >>= 32 - 9;
         skip_bits_long(gb, ff_golomb_vlc_len[buf]);
 
-        av_log(NULL, AV_LOG_INFO, "Golomb code (cached) (indexed) is: %d\n", ff_golomb_vlc_len[buf]);
+//        av_log(NULL, AV_LOG_INFO, "Golomb code (cached) (indexed) is: %d\n", ff_golomb_vlc_len[buf]);
 
         return ff_ue_golomb_vlc_code[buf];
     } else {
@@ -70,7 +70,7 @@ static inline int get_ue_golomb(GetBitContext *gb)
         buf--;
         skip_bits_long(gb, 32 - log);
 
-        av_log(NULL, AV_LOG_INFO, "Golomb code (cached) is: %d\n", buf);
+//        av_log(NULL, AV_LOG_INFO, "Golomb code (cached) is: %d\n", buf);
 
         return buf;
     }
@@ -79,12 +79,14 @@ static inline int get_ue_golomb(GetBitContext *gb)
     UPDATE_CACHE(re, gb);
     buf = GET_CACHE(re, gb);
 
+//    av_log(NULL, AV_LOG_INFO, "buf prior to golomb index checking or decoding: %d\n", buf);
+
     if (buf >= (1 << 27)) {
         buf >>= 32 - 9;
         LAST_SKIP_BITS(re, gb, ff_golomb_vlc_len[buf]);
         CLOSE_READER(re, gb);
 
-        av_log(NULL, AV_LOG_INFO, "Golomb code (indexed) is: %d\n", ff_golomb_vlc_len[buf]);
+//        av_log(NULL, AV_LOG_INFO, "Golomb code (indexed) is: %d\n", ff_golomb_vlc_len[buf]);
 
         return ff_ue_golomb_vlc_code[buf];
     } else {
@@ -98,7 +100,7 @@ static inline int get_ue_golomb(GetBitContext *gb)
         buf >>= log;
         buf--;
 
-        av_log(NULL, AV_LOG_INFO, "Golomb code is: %d\n", buf);
+//        av_log(NULL, AV_LOG_INFO, "Golomb code is: %d\n", buf);
 
         return buf;
     }
