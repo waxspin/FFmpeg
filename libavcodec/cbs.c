@@ -186,8 +186,6 @@ static int cbs_read_fragment_content(CodedBitstreamContext *ctx,
 
         av_log(ctx->log_ctx, AV_LOG_INFO, "codec in use: %d \n", ctx->codec->codec_id);
 
-        ////Roughly here is where we should check to see if we need to seek further, process more, or whatever prior to reading the NAL unit
-
         err = ctx->codec->read_unit(ctx, unit);
         if (err == AVERROR(ENOSYS)) {
             av_log(ctx->log_ctx, AV_LOG_VERBOSE,

@@ -74,13 +74,19 @@ static int h264_redundant_pps_filter(AVBSFContext *bsf, AVPacket *out)
     int au_has_sps;
     int err, i;
 
+    av_log(NULL, AV_LOG_INFO, "Entered h264_redundant_pps_filter\n");
+
     err = ff_bsf_get_packet(bsf, &in);
     if (err < 0)
         return err;
 
+    av_log(NULL, AV_LOG_INFO, "Passed the first error check\n");
+
     err = ff_cbs_read_packet(ctx->input, au, in);
     if (err < 0)
         goto fail;
+
+    av_log(NULL, AV_LOG_INFO, "Passed the second error check\n");
 
     au_has_sps = 0;
     for (i = 0; i < au->nb_units; i++) {
@@ -92,12 +98,14 @@ static int h264_redundant_pps_filter(AVBSFContext *bsf, AVPacket *out)
             err = h264_redundant_pps_fixup_pps(ctx, nal->content);
             if (err < 0)
                 goto fail;
+            av_log(NULL, AV_LOG_INFO, "Passed the first looped error check\n");
             if (!au_has_sps) {
                 av_log(bsf, AV_LOG_VERBOSE, "Deleting redundant PPS "
                        "at %"PRId64".\n", in->pts);
                 err = ff_cbs_delete_unit(ctx->input, au, i);
                 if (err < 0)
                     goto fail;
+                av_log(NULL, AV_LOG_INFO, "Passed post-deletion error check\n");
             }
         }
         if (nal->type == H264_NAL_SLICE ||
@@ -111,10 +119,13 @@ static int h264_redundant_pps_filter(AVBSFContext *bsf, AVPacket *out)
     if (err < 0)
         goto fail;
 
+    av_log(NULL, AV_LOG_INFO, "Passed the first post loop error check\n");
 
     err = av_packet_copy_props(out, in);
     if (err < 0)
         goto fail;
+
+    av_log(NULL, AV_LOG_INFO, "Passed the second post loop error check\n");
 
     err = 0;
 fail:

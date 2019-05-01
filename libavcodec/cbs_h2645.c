@@ -72,7 +72,7 @@ static int cbs_read_ue_golomb(CodedBitstreamContext *ctx, GetBitContext *gbc,
     if (ctx->trace_enable)
         ff_cbs_trace_syntax_element(ctx, position, name, subscripts,
                                     bits, value);
-
+    av_log(NULL, AV_LOG_INFO, "Right before failed cbs_read_ue_golomb\n"); // THIS IS THE SPOT TO DEBUG FROM
     if (value < range_min || value > range_max) {
         av_log(ctx->log_ctx, AV_LOG_ERROR, "%s out of range: "
                "%"PRIu32", but must be in [%"PRIu32",%"PRIu32"].\n",
@@ -128,7 +128,7 @@ static int cbs_read_se_golomb(CodedBitstreamContext *ctx, GetBitContext *gbc,
     if (ctx->trace_enable)
         ff_cbs_trace_syntax_element(ctx, position, name, subscripts,
                                     bits, value);
-
+    av_log(NULL, AV_LOG_INFO, "Right before se golomb\n");
     if (value < range_min || value > range_max) {
         av_log(ctx->log_ctx, AV_LOG_ERROR, "%s out of range: "
                "%"PRId32", but must be in [%"PRId32",%"PRId32"].\n",
@@ -146,6 +146,8 @@ static int cbs_write_ue_golomb(CodedBitstreamContext *ctx, PutBitContext *pbc,
                                uint32_t range_min, uint32_t range_max)
 {
     int len;
+
+    av_log(NULL, AV_LOG_INFO, "Right before write ue golomb\n");
 
     if (value < range_min || value > range_max) {
         av_log(ctx->log_ctx, AV_LOG_ERROR, "%s out of range: "
@@ -190,6 +192,8 @@ static int cbs_write_se_golomb(CodedBitstreamContext *ctx, PutBitContext *pbc,
 {
     int len;
     uint32_t uvalue;
+
+    av_log(NULL, AV_LOG_INFO, "Right before write se golomb");
 
     if (value < range_min || value > range_max) {
         av_log(ctx->log_ctx, AV_LOG_ERROR, "%s out of range: "
